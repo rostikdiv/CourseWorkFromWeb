@@ -20,6 +20,9 @@ public class HouseForRent {
     private Long id;
 
     @Column(nullable = false)
+    private Long ownerId;
+
+    @Column(nullable = false)
     private int price;
 
     @Column(nullable = false)
@@ -142,5 +145,13 @@ public class HouseForRent {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 }

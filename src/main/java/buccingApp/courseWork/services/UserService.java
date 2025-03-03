@@ -24,11 +24,35 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> createUsers(List<User> users) {
+        return userRepository.saveAll(users);
+    }
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
     public Optional<User> getById(Long id){
         return userRepository.findById(id);
     }
+    public String delete(User user){
+        userRepository.delete(user);
+        return "user: "+user.toString()+" has deleted";
+    }
+    public String deleteById(Long id){
+        userRepository.deleteById(id);
+        return "user with id:"+id+" has deleted";
+    }
+    public String deleteAllById(List<Long> ids){
+        userRepository.deleteAllById(ids);
+        return "users with ids: "+ ids.toString()+" has deleted";
+    }
+    public String deleteAll(List<User> users){
+        userRepository.deleteAll(users);
+        return "users: "+users.toString()+"has deleted";
+    }
+    public String deleteAll(){
+        userRepository.deleteAll();
+        return "all users has deleted";
+    }
+
 
 }
