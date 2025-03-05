@@ -23,6 +23,9 @@ public class BookingOfferService {
     public BookingOffer createBookingOffer(BookingOffer bookingOffer){
         return bookingOfferRepository.save(bookingOffer);
     }
+    public List<BookingOffer> createBookingOffers(List<BookingOffer> bookingOffers){
+        return bookingOfferRepository.saveAll(bookingOffers);
+    }
     public Optional<BookingOffer> getById(Long id){
         return bookingOfferRepository.findById(id);
     }

@@ -1,5 +1,6 @@
 package buccingApp.courseWork.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class Photo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_id", nullable = false)
+    @JsonBackReference("house-photo") // Запобігає рекурсії
     private HouseForRent house; // Зв'язок з оголошенням
 
     public Long getId() {
@@ -26,19 +28,19 @@ public class Photo {
         this.id = id;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public HouseForRent getHouse() {
         return house;
     }
 
     public void setHouse(HouseForRent house) {
         this.house = house;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -23,7 +23,7 @@ public class HouseForRentController {
         this.houseForRentService = houseForRentService;
     }
 
-    @RequestMapping
+    @GetMapping
     public List<HouseForRent> getAllHousesForRent(){
         return houseForRentService.getAllHousesForRent();
     }
@@ -41,6 +41,10 @@ public class HouseForRentController {
     @GetMapping("/getById/{id}")
     public Optional<HouseForRent> getHouseForRentById(@PathVariable Long id){
         return houseForRentService.getById(id);
+    }
+    @GetMapping("getById/all/{id}")
+    public List<HouseForRent> getHousesByUserId(@PathVariable Long userId){
+        return houseForRentService.getHousesByUserId(userId);
     }
 
     // Ендпоінт для фільтрації через query параметри

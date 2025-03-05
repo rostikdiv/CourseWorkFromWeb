@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/photos")
@@ -16,7 +17,14 @@ public class PhotoController {
     public PhotoController(PhotoService photoService) {
         this.photoService = photoService;
     }
-
+    @GetMapping
+    public List<Photo> getAllPhotos(){
+        return photoService.getAllPhotos();
+    }
+    @GetMapping("/{id}")
+    public Optional<Photo> getPhotoById(@PathVariable Long id){
+        return photoService.getPhotoById(id);
+    }
     @PostMapping("/add/{houseId}")
     public Photo addPhoto(
             @PathVariable Long houseId,

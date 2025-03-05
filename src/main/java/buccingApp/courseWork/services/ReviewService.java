@@ -20,7 +20,7 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public Review addReview(Review review){
+    public Review addReview(Review review) {
         return reviewRepository.save(review);
     }
     public Optional<Review> getById(Long id){

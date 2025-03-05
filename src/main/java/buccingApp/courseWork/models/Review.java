@@ -1,5 +1,6 @@
 package buccingApp.courseWork.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,19 +18,24 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "author_id")
+//    @JsonBackReference("user-review")
     @Column(nullable = false)
     private Long authorId;
 
-    @Column(nullable = false)
-    private Long houseForRentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HouseForRent_id")
+    @JsonBackReference("house-review")
+    private HouseForRent houseForRent;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String comment;
 
     @Column(nullable = false)
     private int rating;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public Long getId() {
@@ -40,28 +46,12 @@ public class Review {
         this.id = id;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
-
-    public Long getHouseForRentId() {
-        return houseForRentId;
-    }
-
-    public void setHouseForRentId(Long houseForRentId) {
-        this.houseForRentId = houseForRentId;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public int getRating() {
@@ -72,11 +62,27 @@ public class Review {
         this.rating = rating;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getComment() {
+        return comment;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public HouseForRent getHouseForRent() {
+        return houseForRent;
+    }
+
+    public void setHouseForRent(HouseForRent houseForRent) {
+        this.houseForRent = houseForRent;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PhotoService {
@@ -16,6 +17,12 @@ public class PhotoService {
     public PhotoService(PhotoRepository photoRepository, HouseForRentService houseService) {
         this.photoRepository = photoRepository;
         this.houseService = houseService;
+    }
+    public Optional<Photo> getPhotoById(Long id){
+        return photoRepository.findById(id);
+    }
+    public List<Photo> getAllPhotos(){
+        return photoRepository.findAll();
     }
 
     public Photo addPhotoToHouse(Long houseId, String imageUrl) {

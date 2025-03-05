@@ -20,7 +20,7 @@ public class BookingOfferController {
         this.bookingOfferService = bookingOfferService;
     }
 
-    @RequestMapping
+    @GetMapping
     public List<BookingOffer> getAllBookingOffers(){
         return bookingOfferService.getAllBookingOffers();
     }
@@ -29,6 +29,11 @@ public class BookingOfferController {
     public BookingOffer createBookingOffer(@RequestBody BookingOffer bookingOffer){
         return bookingOfferService.createBookingOffer(bookingOffer);
     }
+    @PostMapping("/batch")
+    public List<BookingOffer> createBookingOffer(@RequestBody List<BookingOffer> bookingOffers){
+        return bookingOfferService.createBookingOffers(bookingOffers);
+    }
+
     @GetMapping("/getById/{id}")
     public Optional<BookingOffer> getBookingOfferById(@PathVariable Long id){
         return bookingOfferService.getById(id);

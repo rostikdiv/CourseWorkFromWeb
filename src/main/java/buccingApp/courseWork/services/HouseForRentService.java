@@ -21,6 +21,9 @@ public class HouseForRentService {
     public List<HouseForRent> getAllHousesForRent(){
         return houseForRentRepository.findAll();
     }
+    public List<HouseForRent> getHousesByUserId(Long userId){
+        return houseForRentRepository.findByOwner_Id(userId);
+    }
     public HouseForRent createHouseForRent(HouseForRent houseForRent){
         return houseForRentRepository.save(houseForRent);
     }
@@ -30,6 +33,7 @@ public class HouseForRentService {
     public Optional<HouseForRent> getById(Long id){
         return houseForRentRepository.findById(id);
     }
+
 
     public List<HouseForRent> findWithFilter(HouseFilterDTO filter) {
         Specification<HouseForRent> spec = Specification
