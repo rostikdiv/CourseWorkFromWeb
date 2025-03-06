@@ -35,6 +35,10 @@ public class BookingOfferController {
     public List<BookingOffer> createBookingOffers(@RequestBody List<BookingOffer> bookingOffers){
         return bookingOfferService.saveBookingOffer(bookingOffers);
     }
+    @PostMapping("/toOffer/{id}")
+    public HouseForRent updateHouseForReent (@RequestBody BookingOffer bookingOffer, @PathVariable Long id){
+        return bookingOfferService.saveBookingOffer(bookingOffer,id);
+    }
 
     @GetMapping("/getById/{id}")
     public Optional<BookingOffer> getBookingOfferById(@PathVariable Long id){

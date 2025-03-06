@@ -1,7 +1,9 @@
 package buccingApp.courseWork.controllers;
 
+import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.models.User;
+import buccingApp.courseWork.services.HouseForRentService;
 import buccingApp.courseWork.services.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +24,19 @@ public class ReviewController {
     public List<Review> getAllReviews(){
         return reviewService.getAllReviews();
     }
-    @PostMapping
-    public Review addReview(@RequestBody Review review){
-        return reviewService.saveReview(review);
-    }
     @GetMapping("/{id}")
     public Optional<Review> getReviewById(@PathVariable Long id){
         return reviewService.getById(id);
     }
+    @PostMapping
+    public Review addReview(@RequestBody Review review){
+        return reviewService.saveReview(review);
+    }
+    @PostMapping("/toReview/{id}")
+    public HouseForRent updateHouseForRent(@RequestBody Review review, @PathVariable Long id){
+        return reviewService.saveReview(review, id);
+    }
+
     @PutMapping("/edit/{id}")
     public ResponseEntity<Review> updateUser(@PathVariable Long id, @RequestBody Review updatedReview) {
         // Знаходимо користувача в базі

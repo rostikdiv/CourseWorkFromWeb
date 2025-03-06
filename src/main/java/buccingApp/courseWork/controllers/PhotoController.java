@@ -1,6 +1,7 @@
 package buccingApp.courseWork.controllers;
 
 import buccingApp.courseWork.dto.PhotoRequestDTO;
+import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Photo;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.PhotoService;
@@ -42,8 +43,13 @@ public class PhotoController {
         return ResponseEntity.ok(savedPhotos);
 
     }
+    @PostMapping("/toPhoto/{id}")
+    public HouseForRent createHouseForRent(@RequestBody Photo photo, @PathVariable Long id){
+
+        return photoService.savePhoto(photo, id);
+    }
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Photo> updateUser(@PathVariable Long id, @RequestBody Photo updatedPhoto) {
+    public ResponseEntity<Photo> updateHouseForRent(@PathVariable Long id, @RequestBody Photo updatedPhoto) {
         // Знаходимо користувача в базі
         Photo photo = photoService.getPhotoById(id)
                 .orElseThrow(() -> new RuntimeException("Photo not found"));

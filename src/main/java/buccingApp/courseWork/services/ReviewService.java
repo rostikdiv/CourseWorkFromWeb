@@ -1,7 +1,10 @@
 package buccingApp.courseWork.services;
 
+import buccingApp.courseWork.models.HouseForRent;
+import buccingApp.courseWork.models.Photo;
 import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.models.User;
+import buccingApp.courseWork.repositories.HouseForRentRepository;
 import buccingApp.courseWork.repositories.ReviewRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +15,11 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final HouseForRentRepository houseForRentRepository;
 
-    public ReviewService(ReviewRepository reviewRepository){
+    public ReviewService(ReviewRepository reviewRepository, HouseForRentRepository houseForRentRepository){
         this.reviewRepository=reviewRepository;
+        this.houseForRentRepository=houseForRentRepository;
     }
 
     public List<Review> getAllReviews(){
@@ -29,6 +34,14 @@ public class ReviewService {
     }
     public Optional<Review> getById(Long id){
         return reviewRepository.findById(id);
+    }
+
+    public HouseForRent saveReview(Review review, Long id){
+        Review newReview = review;
+        HouseForRent houseForRent = houseForRentRepository.getById(id);
+        houseForRent.addReview(newReview);
+        reviewRepository.save(newReview);
+        return houseForRent;
     }
 
     public String delete(Review review){

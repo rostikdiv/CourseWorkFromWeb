@@ -3,11 +3,16 @@ package buccingApp.courseWork.services;
 import buccingApp.courseWork.dto.HouseFilterDTO;
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Review;
+import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.repositories.HouseForRentRepository;
+import buccingApp.courseWork.repositories.UserRepository;
 import buccingApp.courseWork.specifications.HouseSpecifications;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +20,11 @@ import java.util.Optional;
 @Service
 public class HouseForRentService {
     private final HouseForRentRepository houseForRentRepository;
+    private final UserRepository userRepository;
 
-    public HouseForRentService(HouseForRentRepository houseForRentRepository){
+    public HouseForRentService(HouseForRentRepository houseForRentRepository, UserRepository userRepository){
         this.houseForRentRepository=houseForRentRepository;
+        this.userRepository =userRepository;
     }
     public List<HouseForRent> getAllHousesForRent(){
         return houseForRentRepository.findAll();
@@ -33,6 +40,13 @@ public class HouseForRentService {
     }
     public Optional<HouseForRent> getById(Long id){
         return houseForRentRepository.findById(id);
+    }
+    public User saveUser(HouseForRent houseForRent,Long id){
+        HouseForRent newHouseForRent= houseForRent;
+        User user = userRepository.getById(id);
+        user.addHouseForRent(newHouseForRent);
+        houseForRentRepository.save(newHouseForRent);
+        return user;
     }
 
 

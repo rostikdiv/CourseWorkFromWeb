@@ -4,6 +4,7 @@ import buccingApp.courseWork.dto.HouseFilterDTO;
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.HouseForRentService;
+import buccingApp.courseWork.services.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,11 @@ import java.util.Optional;
 public class HouseForRentController {
 
     private final HouseForRentService houseForRentService;
+    private final UserService userService;
 
-    public HouseForRentController(HouseForRentService houseForRentService){
+    public HouseForRentController(HouseForRentService houseForRentService, UserService userService){
         this.houseForRentService = houseForRentService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -29,6 +32,11 @@ public class HouseForRentController {
     @PostMapping
     public HouseForRent createHouseForRent(@RequestBody HouseForRent houseForRent){
         return houseForRentService.saveHouseForRent(houseForRent);
+    }
+    @PostMapping("/toUser/{id}")
+    public User createHouseForRent(@RequestBody HouseForRent houseForRent, @PathVariable Long id){
+
+        return houseForRentService.saveUser(houseForRent, id);
     }
     @PostMapping("/batch")
     public List<HouseForRent> createMultipleHouses(@RequestBody List<HouseForRent> housesForRent) {

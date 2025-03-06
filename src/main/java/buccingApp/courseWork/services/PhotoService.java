@@ -3,6 +3,8 @@ package buccingApp.courseWork.services;
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Photo;
 import buccingApp.courseWork.models.Review;
+import buccingApp.courseWork.models.User;
+import buccingApp.courseWork.repositories.HouseForRentRepository;
 import buccingApp.courseWork.repositories.PhotoRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,13 @@ import java.util.Optional;
 public class PhotoService {
     private final PhotoRepository photoRepository;
     private final HouseForRentService houseService;
+    private final HouseForRentRepository houseForRentRepository;
 
-    public PhotoService(PhotoRepository photoRepository, HouseForRentService houseService) {
+    public PhotoService(PhotoRepository photoRepository,
+                        HouseForRentService houseService,HouseForRentRepository houseForRentRepository) {
         this.photoRepository = photoRepository;
         this.houseService = houseService;
+        this.houseForRentRepository =houseForRentRepository;
     }
     public Optional<Photo> getPhotoById(Long id){
         return photoRepository.findById(id);
@@ -36,6 +41,13 @@ public class PhotoService {
         photo.setImageUrl(imageUrl);
         photo.setHouse(house);
         return photoRepository.save(photo);
+    }
+    public HouseForRent savePhoto(Photo photo, Long id){
+        Photo newPhoto= photo;
+        HouseForRent houseForRent = houseForRentRepository.getById(id);
+        houseForRent.addPhoto(newPhoto);
+        photoRepository.save(newPhoto);
+        return houseForRent;
     }
 
     public List<Photo> addPhotosToHouse(Long houseId, List<String> imageUrls) {

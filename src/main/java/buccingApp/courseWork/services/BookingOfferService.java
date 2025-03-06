@@ -1,9 +1,11 @@
 package buccingApp.courseWork.services;
 
+import buccingApp.courseWork.controllers.BookingOfferController;
 import buccingApp.courseWork.models.BookingOffer;
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.repositories.BookingOfferRepository;
+import buccingApp.courseWork.repositories.HouseForRentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.Optional;
 public class BookingOfferService {
 
     private final BookingOfferRepository bookingOfferRepository;
+    private final HouseForRentRepository houseForRentRepository;
 
-    public BookingOfferService(BookingOfferRepository bookingOfferRepository){
+    public BookingOfferService(BookingOfferRepository bookingOfferRepository,HouseForRentRepository houseForRentRepository){
         this.bookingOfferRepository = bookingOfferRepository;
+        this.houseForRentRepository = houseForRentRepository;
     }
     public List<BookingOffer> getAllBookingOffers(){
         return bookingOfferRepository.findAll();
@@ -28,6 +32,14 @@ public class BookingOfferService {
     }
     public Optional<BookingOffer> getById(Long id){
         return bookingOfferRepository.findById(id);
+    }
+
+    public HouseForRent saveBookingOffer(BookingOffer bookingOffer, Long id){
+        BookingOffer newBookingOffer = bookingOffer;
+        HouseForRent houseForRent = houseForRentRepository.getById(id);
+        houseForRent.addHouseOffer(newBookingOffer);
+        bookingOfferRepository.save(newBookingOffer);
+        return houseForRent;
     }
 
     public String delete(BookingOffer bookingOffer){
