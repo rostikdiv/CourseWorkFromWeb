@@ -2,6 +2,7 @@ package buccingApp.courseWork.services;
 
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Photo;
+import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.repositories.PhotoRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,10 @@ public class PhotoService {
         return photoRepository.findAll();
     }
 
+    public Photo savePhoto(Photo photo){
+        return photoRepository.save(photo);
+    }
+
     public Photo addPhotoToHouse(Long houseId, String imageUrl) {
         HouseForRent house = houseService.getById(houseId).orElseThrow();
         Photo photo = new Photo();
@@ -46,6 +51,18 @@ public class PhotoService {
         }
 
         return photoRepository.saveAll(photos); // Зберігаємо всі фотографії
+    }
+    public String delete(Photo photo){
+        photoRepository.delete(photo);
+        return "photo: "+photo.toString()+" has deleted";
+    }
+    public String deleteById(Long id){
+        photoRepository.deleteById(id);
+        return "photo with id:"+id+" has deleted";
+    }
+    public String deleteAll(){
+        photoRepository.deleteAll();
+        return "all photos has deleted";
     }
 
 }

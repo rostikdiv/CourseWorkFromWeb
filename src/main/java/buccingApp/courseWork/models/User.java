@@ -1,5 +1,6 @@
 package buccingApp.courseWork.models;
 
+import buccingApp.courseWork.controllers.HouseForRentController;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -28,10 +29,10 @@ public class User {
     private String lastName;
 
     @Column(nullable = false)
-    private String status;
+    private String email;
 
     @Column(nullable = false)
-    private String email;
+    private String phoneNumber;
 
     @Column(nullable = false, unique = true)
     private String login;
@@ -39,7 +40,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST,orphanRemoval = true)
     @JsonManagedReference("user-house")
     private List<HouseForRent> housesForRentList = new ArrayList<>();
 //
@@ -47,6 +48,14 @@ public class User {
 //    @JsonManagedReference("user-review")
 //    private List<Long> ownReviewsId = new ArrayList<>();
 
+    public void addHouseForRent(HouseForRent houseForRent){
+        housesForRentList.add(houseForRent);
+        houseForRent.setOwner(this);
+    }
+    public void removeHouseForRent(HouseForRent houseForRent){
+        housesForRentList.remove(houseForRent);
+        houseForRent.setOwner(null);
+    }
     public Long getId() {
         return id;
     }
@@ -69,14 +78,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getEmail() {
@@ -111,6 +112,13 @@ public class User {
         this.housesForRentList = housesForRentList;
     }
 
+    public String  getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String  phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 //    public List<Long> getOwnReviewsId() {
 //        return ownReviewsId;
 //    }

@@ -2,6 +2,7 @@ package buccingApp.courseWork.services;
 
 import buccingApp.courseWork.dto.HouseFilterDTO;
 import buccingApp.courseWork.models.HouseForRent;
+import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.repositories.HouseForRentRepository;
 import buccingApp.courseWork.specifications.HouseSpecifications;
 import lombok.Data;
@@ -24,10 +25,10 @@ public class HouseForRentService {
     public List<HouseForRent> getHousesByUserId(Long userId){
         return houseForRentRepository.findByOwner_Id(userId);
     }
-    public HouseForRent createHouseForRent(HouseForRent houseForRent){
+    public HouseForRent saveHouseForRent(HouseForRent houseForRent){
         return houseForRentRepository.save(houseForRent);
     }
-    public List<HouseForRent> createHousesForRent(List<HouseForRent> housesForRent){
+    public List<HouseForRent> saveHouseForRent(List<HouseForRent> housesForRent){
         return houseForRentRepository.saveAll(housesForRent);
     }
     public Optional<HouseForRent> getById(Long id){
@@ -55,6 +56,19 @@ public class HouseForRentService {
         }
 
         return houseForRentRepository.findAll(spec);
+    }
+
+    public String delete(HouseForRent houseForRent){
+        houseForRentRepository.delete(houseForRent);
+        return "review: "+houseForRent.toString()+" has deleted";
+    }
+    public String deleteById(Long id){
+        houseForRentRepository.deleteById(id);
+        return "houseForRent with id:"+id+" has deleted";
+    }
+    public String deleteAll(){
+        houseForRentRepository.deleteAll();
+        return "all houseForRents has deleted";
     }
 
 }

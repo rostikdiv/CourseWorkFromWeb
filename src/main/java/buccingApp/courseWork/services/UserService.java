@@ -20,19 +20,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User createUser(User user) {
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    public List<User> createUsers(List<User> users) {
+    public List<User> saveUser(List<User> users) {
         return userRepository.saveAll(users);
     }
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
     public Optional<User> getById(Long id){
         return userRepository.findById(id);
     }
+
     public String delete(User user){
         userRepository.delete(user);
         return "user: "+user.toString()+" has deleted";

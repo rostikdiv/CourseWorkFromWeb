@@ -20,13 +20,26 @@ public class BookingOfferService {
     public List<BookingOffer> getAllBookingOffers(){
         return bookingOfferRepository.findAll();
     }
-    public BookingOffer createBookingOffer(BookingOffer bookingOffer){
+    public BookingOffer saveBookingOffer(BookingOffer bookingOffer){
         return bookingOfferRepository.save(bookingOffer);
     }
-    public List<BookingOffer> createBookingOffers(List<BookingOffer> bookingOffers){
+    public List<BookingOffer> saveBookingOffer(List<BookingOffer> bookingOffers){
         return bookingOfferRepository.saveAll(bookingOffers);
     }
     public Optional<BookingOffer> getById(Long id){
         return bookingOfferRepository.findById(id);
+    }
+
+    public String delete(BookingOffer bookingOffer){
+        bookingOfferRepository.delete(bookingOffer);
+        return "bookingOffer: "+bookingOffer.toString()+" has deleted";
+    }
+    public String deleteById(Long id){
+        bookingOfferRepository.deleteById(id);
+        return "bookingOffer with id:"+id+" has deleted";
+    }
+    public String deleteAll(){
+        bookingOfferRepository.deleteAll();
+        return "all bookingOffers has deleted";
     }
 }

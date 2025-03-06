@@ -2,10 +2,8 @@ package buccingApp.courseWork.controllers;
 
 import buccingApp.courseWork.dto.HouseFilterDTO;
 import buccingApp.courseWork.models.HouseForRent;
-import buccingApp.courseWork.models.RentedHouse;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.HouseForRentService;
-import buccingApp.courseWork.services.RentedHouseService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +28,12 @@ public class HouseForRentController {
 
     @PostMapping
     public HouseForRent createHouseForRent(@RequestBody HouseForRent houseForRent){
-        return houseForRentService.createHouseForRent(houseForRent);
+        return houseForRentService.saveHouseForRent(houseForRent);
     }
     @PostMapping("/batch")
     public List<HouseForRent> createMultipleHouses(@RequestBody List<HouseForRent> housesForRent) {
 
-        return houseForRentService.createHousesForRent(housesForRent);
+        return houseForRentService.saveHouseForRent(housesForRent);
 
     }
     @GetMapping("/getById/{id}")
@@ -78,6 +76,41 @@ public class HouseForRentController {
     @PostMapping("/search")
     public List<HouseForRent> searchHouses(@RequestBody HouseFilterDTO filter) {
         return houseForRentService.findWithFilter(filter);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<HouseForRent> updateUser(@PathVariable Long id, @RequestBody HouseForRent updatedHouseForRent) {
+        // Знаходимо користувача в базі
+        HouseForRent houseForRent = houseForRentService.getById(id)
+                .orElseThrow(() -> new RuntimeException("HouseForRent not found"));
+
+        // Оновлюємо поля, якщо передані нові значення
+        if(updatedHouseForRent.getArea() != 0){ houseForRent.setArea(updatedHouseForRent.getArea());}
+        if (updatedHouseForRent.getHasParking() != null) {houseForRent.setHasParking(updatedHouseForRent.getHasParking());}
+        if (updatedHouseForRent.getHasPool() != null) {houseForRent.setHasParking(updatedHouseForRent.getHasParking());}
+        if (updatedHouseForRent.getHasWifi() != null) {updatedHouseForRent.setHasWifi(houseForRent.getHasWifi());}
+        if (updatedHouseForRent.getCity() != null){houseForRent.setCity(updatedHouseForRent.getCity());}
+        if (updatedHouseForRent.getDescription() != null){houseForRent.setDescription(updatedHouseForRent.getDescription());}
+        if (updatedHouseForRent.getPrice() != null){houseForRent.setPrice(updatedHouseForRent.getPrice());}
+        if (updatedHouseForRent.getRooms() != null){houseForRent.setRooms(updatedHouseForRent.getRooms());}
+        if (updatedHouseForRent.getTitle() != null){houseForRent.setTitle(updatedHouseForRent.getTitle());}
+
+        HouseForRent savedHouseForRent = houseForRentService.saveHouseForRent(houseForRent);
+
+        return ResponseEntity.ok(savedHouseForRent);
+    }
+
+    @PostMapping("/delete/houseForRent")
+    public String delete(@RequestBody HouseForRent houseForRent){
+        return houseForRentService.delete(houseForRent);
+    }
+    @GetMapping("delete/byId/{id}")
+    public String deleteById(@PathVariable Long id){
+        return houseForRentService.deleteById(id);
+    }
+    @GetMapping("/delete/all")
+    public String deleteAll(){
+        return houseForRentService.deleteAll();
     }
 
 }

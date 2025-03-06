@@ -2,6 +2,7 @@ package buccingApp.courseWork.controllers;
 
 import buccingApp.courseWork.dto.PhotoRequestDTO;
 import buccingApp.courseWork.models.Photo;
+import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.PhotoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,33 @@ public class PhotoController {
         List<Photo> savedPhotos = photoService.addPhotosToHouse(houseId, photoRequest.getImageUrls());
         return ResponseEntity.ok(savedPhotos);
 
+    }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Photo> updateUser(@PathVariable Long id, @RequestBody Photo updatedPhoto) {
+        // Знаходимо користувача в базі
+        Photo photo = photoService.getPhotoById(id)
+                .orElseThrow(() -> new RuntimeException("Photo not found"));
+
+        // Оновлюємо поля, якщо передані нові значення
+        if (updatedPhoto.getImageUrl() != null){photo.setImageUrl(updatedPhoto.getImageUrl());}
+
+        // Зберігаємо оновлені дані в базі
+        Photo savedPhoto = photoService.savePhoto(photo);
+
+        return ResponseEntity.ok(savedPhoto);
+    }
+
+    @PostMapping("/delete/photo")
+    public String delete(@RequestBody Photo photo){
+        return photoService.delete(photo);
+    }
+    @GetMapping("delete/byId/{id}")
+    public String deleteById(@PathVariable Long id){
+        return photoService.deleteById(id);
+    }
+    @GetMapping("/delete/all")
+    public String deleteAll(){
+        return photoService.deleteAll();
     }
 
 }
