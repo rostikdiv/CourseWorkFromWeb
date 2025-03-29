@@ -6,6 +6,7 @@ import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.HouseForRentService;
 import buccingApp.courseWork.services.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +46,10 @@ public class HouseForRentController {
 
     }
     @GetMapping("/getById/{id}")
-    public Optional<HouseForRent> getHouseForRentById(@PathVariable Long id){
-        return houseForRentService.getById(id);
+    public ResponseEntity<?> getHouseForRentById(@PathVariable Long id){
+        return houseForRentService.getById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("House not found"));
     }
     @GetMapping("getById/all/{id}")
     public List<HouseForRent> getHousesByUserId(@PathVariable Long userId){

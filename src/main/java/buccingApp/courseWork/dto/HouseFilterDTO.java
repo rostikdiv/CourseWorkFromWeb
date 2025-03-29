@@ -1,8 +1,10 @@
 package buccingApp.courseWork.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class HouseFilterDTO {
     private String city;
     private Integer minPrice;
@@ -54,6 +56,14 @@ public class HouseFilterDTO {
         this.hasWifi = hasWifi;
     }
 
+    public Double getMinArea() {
+        return minArea;
+    }
+
+    public void setMinArea(Double minArea) {
+        this.minArea = minArea;
+    }
+
     public Boolean getHasParking() {
         return hasParking;
     }
@@ -76,13 +86,5 @@ public class HouseFilterDTO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
-    }
-
-    public Double getMinArea() {
-        return minArea;
-    }
-
-    public void setMinArea(Double minArea) {
-        this.minArea = minArea;
     }
 }

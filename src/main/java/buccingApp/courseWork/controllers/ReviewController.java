@@ -5,6 +5,7 @@ import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.HouseForRentService;
 import buccingApp.courseWork.services.ReviewService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,10 @@ public class ReviewController {
         return reviewService.getAllReviews();
     }
     @GetMapping("/{id}")
-    public Optional<Review> getReviewById(@PathVariable Long id){
-        return reviewService.getById(id);
+    public ResponseEntity<?> getReviewById(@PathVariable Long id){
+        return reviewService.getById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found"));
     }
     @PostMapping
     public Review addReview(@RequestBody Review review){

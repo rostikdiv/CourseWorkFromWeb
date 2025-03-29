@@ -1,6 +1,5 @@
 package buccingApp.courseWork.models;
 
-import buccingApp.courseWork.controllers.HouseForRentController;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

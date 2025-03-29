@@ -5,6 +5,7 @@ import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.BookingOfferService;
 import buccingApp.courseWork.services.HouseForRentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +42,10 @@ public class BookingOfferController {
     }
 
     @GetMapping("/getById/{id}")
-    public Optional<BookingOffer> getBookingOfferById(@PathVariable Long id){
-        return bookingOfferService.getById(id);
+    public ResponseEntity<?> getBookingOfferById(@PathVariable Long id){
+        return bookingOfferService.getById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
     }
     @PutMapping("/edit/{id}")
     public ResponseEntity<BookingOffer> updateUser(@PathVariable Long id, @RequestBody BookingOffer updatedBookingOffer) {

@@ -1,6 +1,5 @@
 package buccingApp.courseWork.services;
 
-import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -34,6 +33,26 @@ public class UserService {
     public Optional<User> getById(Long id){
         return userRepository.findById(id);
     }
+    public User authorization(String login, String password) {
+        Optional<User> optionalUser = userRepository.findByLogin(login);
+
+        System.out.println("login: "+login+"password: "+password);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+
+        // Порівнюємо значення, а не посилання
+        if (user.getPassword().equals(password.trim())) {
+            user.setPassword(null);
+            return user;
+        } else {
+            throw new RuntimeException("Incorrect password");
+        }
+    }
+
 
     public String delete(User user){
         userRepository.delete(user);

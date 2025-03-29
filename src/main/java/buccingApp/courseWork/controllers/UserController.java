@@ -4,6 +4,7 @@ import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +36,36 @@ public class UserController {
     }
 
     @GetMapping("/getById/{id}")
-    public Optional<User> getUserById(@PathVariable Long id){
-        return userService.getById(id);
-    }
-    @GetMapping("/getByEmail/{email}")
-    public Optional<User> getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        return userService.getById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
     }
 
+
+    @GetMapping("/getById/{id}/getPass")
+    public ResponseEntity<String> getPassById(@PathVariable Long id) {
+        return userService.getById(id)
+                .map(user -> ResponseEntity.ok(user.getPassword())) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
+    }
+
+    @GetMapping("/getByEmail/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
+    }
+
+    @GetMapping("/login/{login}/{password}")
+    public User login(@PathVariable String login, @PathVariable String password){
+        return userService.authorization(login,password);
+    }
+
+//    @GetMapping("/getByEmail/{email}")
+//    public Optional<User> getUserByEmail(@PathVariable String email) {
+//        return userService.getUserByEmail(email);
+//    }
     @PutMapping("/edit/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         // Знаходимо користувача в базі

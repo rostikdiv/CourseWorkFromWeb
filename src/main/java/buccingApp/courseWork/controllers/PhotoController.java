@@ -5,6 +5,7 @@ import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.Photo;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.PhotoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,10 @@ public class PhotoController {
         return photoService.getAllPhotos();
     }
     @GetMapping("/{id}")
-    public Optional<Photo> getPhotoById(@PathVariable Long id){
-        return photoService.getPhotoById(id);
+    public ResponseEntity<?> getPhotoById(@PathVariable Long id){
+        return photoService.getPhotoById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Photo not found"));
     }
     @PostMapping("/add/{houseId}")
     public Photo addPhoto(
