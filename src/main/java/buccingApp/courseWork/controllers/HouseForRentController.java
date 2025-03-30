@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/ForRent")
-@CrossOrigin(origins = "*") // Якщо ти надсилаєш запити з фронтенду
+@CrossOrigin(origins = "http://localhost:5000", allowCredentials = "true")
 public class HouseForRentController {
 
     private final HouseForRentService houseForRentService;

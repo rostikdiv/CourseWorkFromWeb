@@ -1,9 +1,14 @@
 package buccingApp.courseWork.controllers;
 
+import buccingApp.courseWork.dto.LoginRequestDTO;
 import buccingApp.courseWork.models.Review;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.services.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +23,11 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    private String generateToken(User user) {
+        // Ваша логіка генерації JWT або іншого токена
+        return "generated-jwt-token-" + user.getId();
     }
 
     @GetMapping
@@ -62,6 +72,48 @@ public class UserController {
         return userService.authorization(login,password);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<User> login(
+            @Valid @RequestBody LoginRequestDTO request,
+            HttpServletResponse response
+    ) {
+        // Аутентифікація
+        User user = userService.authenticate(request);
+
+        // Генерація токена (приклад, використовуйте вашу логіку)
+        String token = generateToken(user);
+
+        // Налаштування HTTP-only куки
+        Cookie cookie = new Cookie("auth_token", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // Для HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(7 * 24 * 60 * 60); // Термін дії 7 днів
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(user);
+    }
+
+    // UserController.java
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        // Інвалідація сесії
+        request.getSession().invalidate();
+
+        // Очищення кукі
+        Cookie cookie = new Cookie("auth_token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0); // Видаляємо куку
+        response.addCookie(cookie);
+
+        // Додаткове очищення заголовків
+        response.setHeader("Authorization", "");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+        System.out.println("Logout successful for session: " + request.getSession().getId());
+        return ResponseEntity.ok("Successfully logged out");
+    }
 //    @GetMapping("/getByEmail/{email}")
 //    public Optional<User> getUserByEmail(@PathVariable String email) {
 //        return userService.getUserByEmail(email);

@@ -1,5 +1,6 @@
 package buccingApp.courseWork.services;
 
+import buccingApp.courseWork.dto.LoginRequestDTO;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,18 @@ public class UserService {
         } else {
             throw new RuntimeException("Incorrect password");
         }
+    }
+
+    // src/main/java/buccingApp/courseWork/services/UserService.java
+    public User authenticate(LoginRequestDTO request) {
+        User user = userRepository.findByLogin(request.getLogin())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getPassword().equals(request.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return user;
     }
 
 
