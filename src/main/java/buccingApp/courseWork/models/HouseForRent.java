@@ -3,11 +3,13 @@ package buccingApp.courseWork.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@CrossOrigin(origins = "*") // Якщо ти надсилаєш запити з фронтенду
 public class HouseForRent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +57,13 @@ public class HouseForRent {
     @JoinColumn(name ="owner_id", nullable = false)
     @JsonBackReference("user-house")
     private User owner;
+
+    @JsonProperty("houseOwnerId")  // Це гарантує, що поле буде в JSON
+    public Long getHouseOwnerId() {
+        return owner != null ? owner.getId() : null;
+    }
+
+//    private Long houseOwnerId = owner != null ? owner.getId() : null;
 
     @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("house-photo")
@@ -179,8 +189,9 @@ public class HouseForRent {
         this.hasPool = hasPool;
     }
 
+//    @JsonProperty("ownerId")
     public User getOwner() {
-        return owner;
+        return owner ;
     }
 
     public void setOwner(User owner) {
@@ -210,4 +221,12 @@ public class HouseForRent {
     public void setBookingOffers(List<BookingOffer> bookingOffers) {
         this.bookingOffers = bookingOffers;
     }
+
+//    public Long getHouseOwnerId() {
+//        return houseOwnerId;
+//    }
+//
+//    public void setHouseOwnerId(Long ownerId) {
+//        this.houseOwnerId = ownerId;
+//    }
 }

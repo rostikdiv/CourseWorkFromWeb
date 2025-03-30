@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/ForRent")
+@CrossOrigin(origins = "*") // Якщо ти надсилаєш запити з фронтенду
 public class HouseForRentController {
 
     private final HouseForRentService houseForRentService;
