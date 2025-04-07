@@ -3,6 +3,7 @@ package buccingApp.courseWork.controllers;
 import buccingApp.courseWork.models.BookingOffer;
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.User;
+import buccingApp.courseWork.repositories.UserRepository;
 import buccingApp.courseWork.services.BookingOfferService;
 import buccingApp.courseWork.services.HouseForRentService;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,11 @@ public class BookingOfferController {
 
     private final BookingOfferService bookingOfferService;
 
+    private final UserRepository userRepository;
 
-    public BookingOfferController(BookingOfferService bookingOfferService){
+    public BookingOfferController(BookingOfferService bookingOfferService, UserRepository userRepository){
         this.bookingOfferService = bookingOfferService;
+        this.userRepository =userRepository;
     }
 
     @GetMapping
@@ -47,6 +50,25 @@ public class BookingOfferController {
                 .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
     }
+    @GetMapping("/getAlBbyUserId/{userId}")
+    public List<BookingOffer> getBookingOffersByOwnerId(@PathVariable Long userId){
+        return bookingOfferService.getBookingOffersByOwnerId(userId);
+    }
+
+//    // Оновлений ендпоінт для отримання пропозицій поточного користувача
+//    @GetMapping("/myOffers")
+//    public ResponseEntity<List<BookingOffer>> getMyBookingOffers() {
+//        // Отримуємо поточного користувача через Spring Security
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = authentication.getName(); // Отримуємо login користувача
+//        User user = userRepository.findByLogin(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // Отримуємо пропозиції для цього користувача
+//        List<BookingOffer> myOffers = bookingOfferService.getBookingOffersByOwnerId(user.getId());
+//        return ResponseEntity.ok(myOffers);
+//    }
+
     @PutMapping("/edit/{id}")
     public ResponseEntity<BookingOffer> updateUser(@PathVariable Long id, @RequestBody BookingOffer updatedBookingOffer) {
         // Знаходимо користувача в базі

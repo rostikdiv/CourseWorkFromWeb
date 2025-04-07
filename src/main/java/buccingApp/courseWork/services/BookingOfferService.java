@@ -24,6 +24,9 @@ public class BookingOfferService {
     public List<BookingOffer> getAllBookingOffers(){
         return bookingOfferRepository.findAll();
     }
+    public List<BookingOffer> getBookingOffersByOwnerId(Long userId) {
+        return bookingOfferRepository.findByLessorId(userId);
+    }
     public BookingOffer saveBookingOffer(BookingOffer bookingOffer){
         return bookingOfferRepository.save(bookingOffer);
     }

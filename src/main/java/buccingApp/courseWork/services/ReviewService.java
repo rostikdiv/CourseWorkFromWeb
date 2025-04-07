@@ -26,6 +26,10 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
+    public List<Review> getReviewsByHouseId(Long houseId) {
+        return reviewRepository.findByHouseForRentId(houseId);
+    }
+
     public Review saveReview(Review review) {
         return reviewRepository.save(review);
     }

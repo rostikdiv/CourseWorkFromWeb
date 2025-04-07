@@ -20,6 +20,7 @@ public class BookingOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
     private Long id;
+
     @JsonProperty("lessorId")
     @Column(nullable = false)
     private Long lessorId;
@@ -36,6 +37,12 @@ public class BookingOffer {
     @JoinColumn(name = "houseOffer_id")
     @JsonBackReference("house-offer")
     private HouseForRent houseOffer;
+
+    // Додаємо геттер для houseForRentId, який повертає ID будинку
+    @JsonProperty("houseForRentId")
+    public Long getHouseForRentId() {
+        return houseOffer != null ? houseOffer.getId() : null;
+    }
 
     public Long getId() {
         return id;

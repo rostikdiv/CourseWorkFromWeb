@@ -2,9 +2,7 @@ package buccingApp.courseWork.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -92,4 +90,5 @@ public class Review {
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
+
 }

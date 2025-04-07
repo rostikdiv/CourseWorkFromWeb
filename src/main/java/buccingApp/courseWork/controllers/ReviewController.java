@@ -40,6 +40,12 @@ public class ReviewController {
         return reviewService.saveReview(review, id);
     }
 
+    @GetMapping("/byHouse/{houseId}")
+    public ResponseEntity<List<Review>> getReviewsByHouseId(@PathVariable Long houseId) {
+        List<Review> reviews = reviewService.getReviewsByHouseId(houseId);
+        return ResponseEntity.ok(reviews);
+    }
+
     @PutMapping("/edit/{id}")
     public ResponseEntity<Review> updateUser(@PathVariable Long id, @RequestBody Review updatedReview) {
         // Знаходимо користувача в базі
