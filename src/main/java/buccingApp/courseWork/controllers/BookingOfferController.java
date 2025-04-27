@@ -1,5 +1,7 @@
 package buccingApp.courseWork.controllers;
 
+import buccingApp.courseWork.dto.MyBookingOfferDTO;
+import buccingApp.courseWork.dto.ReceivedBookingOfferDTO;
 import buccingApp.courseWork.models.BookingOffer;
 import buccingApp.courseWork.models.HouseForRent;
 import buccingApp.courseWork.models.User;
@@ -51,8 +53,13 @@ public class BookingOfferController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
     }
     @GetMapping("/getAlBbyUserId/{userId}")
-    public List<BookingOffer> getBookingOffersByOwnerId(@PathVariable Long userId){
+    public List<MyBookingOfferDTO> getBookingOffersByUserId(@PathVariable Long userId) {
         return bookingOfferService.getBookingOffersByOwnerId(userId);
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public List<ReceivedBookingOfferDTO> getBookingOffersForOwnerHouses(@PathVariable Long ownerId) {
+        return bookingOfferService.getBookingOffersForOwnerHouses(ownerId);
     }
 
 //    // Оновлений ендпоінт для отримання пропозицій поточного користувача

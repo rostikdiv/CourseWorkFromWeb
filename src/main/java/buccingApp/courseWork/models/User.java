@@ -41,7 +41,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST,orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL,orphanRemoval = false)
     @JsonManagedReference("user-house")
     private List<HouseForRent> housesForRentList = new ArrayList<>();
 //

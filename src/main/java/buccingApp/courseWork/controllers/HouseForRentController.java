@@ -36,7 +36,7 @@ public class HouseForRentController {
         return houseForRentService.saveHouseForRent(houseForRent);
     }
     @PostMapping("/toUser/{id}")
-    public User createHouseForRent(@RequestBody HouseForRent houseForRent, @PathVariable Long id){
+    public HouseForRent createHouseForRent(@RequestBody HouseForRent houseForRent, @PathVariable Long id){
 
         return houseForRentService.saveUser(houseForRent, id);
     }
@@ -52,7 +52,7 @@ public class HouseForRentController {
                 .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("House not found"));
     }
-    @GetMapping("getById/all/{id}")
+    @GetMapping("getById/all/{userId}")
     public List<HouseForRent> getHousesByUserId(@PathVariable Long userId){
         return houseForRentService.getHousesByUserId(userId);
     }
@@ -97,18 +97,40 @@ public class HouseForRentController {
                 .orElseThrow(() -> new RuntimeException("HouseForRent not found"));
 
         // Оновлюємо поля, якщо передані нові значення
-        if(updatedHouseForRent.getArea() != 0){ houseForRent.setArea(updatedHouseForRent.getArea());}
-        if (updatedHouseForRent.getHasParking() != null) {houseForRent.setHasParking(updatedHouseForRent.getHasParking());}
-        if (updatedHouseForRent.getHasPool() != null) {houseForRent.setHasParking(updatedHouseForRent.getHasParking());}
-        if (updatedHouseForRent.getHasWifi() != null) {updatedHouseForRent.setHasWifi(houseForRent.getHasWifi());}
-        if (updatedHouseForRent.getCity() != null){houseForRent.setCity(updatedHouseForRent.getCity());}
-        if (updatedHouseForRent.getDescription() != null){houseForRent.setDescription(updatedHouseForRent.getDescription());}
-        if (updatedHouseForRent.getPrice() != null){houseForRent.setPrice(updatedHouseForRent.getPrice());}
-        if (updatedHouseForRent.getRooms() != null){houseForRent.setRooms(updatedHouseForRent.getRooms());}
-        if (updatedHouseForRent.getTitle() != null){houseForRent.setTitle(updatedHouseForRent.getTitle());}
+        if (updatedHouseForRent.getTitle() != null) {
+            houseForRent.setTitle(updatedHouseForRent.getTitle());
+        }
+        if (updatedHouseForRent.getDescription() != null) {
+            houseForRent.setDescription(updatedHouseForRent.getDescription());
+        }
+        if (updatedHouseForRent.getCity() != null) {
+            houseForRent.setCity(updatedHouseForRent.getCity());
+        }
+        if (updatedHouseForRent.getRooms() != 0) {
+            houseForRent.setRooms(updatedHouseForRent.getRooms());
+        }
+        if (updatedHouseForRent.getArea() != 0) {
+            houseForRent.setArea(updatedHouseForRent.getArea());
+        }
+        if (updatedHouseForRent.getPrice() != 0) {
+            houseForRent.setPrice(updatedHouseForRent.getPrice());
+        }
+        if (updatedHouseForRent.getHasWifi() != null) {
+            houseForRent.setHasWifi(updatedHouseForRent.getHasWifi());
+        }
+        if (updatedHouseForRent.getHasParking() != null) {
+            houseForRent.setHasParking(updatedHouseForRent.getHasParking());
+        }
+        if (updatedHouseForRent.getHasPool() != null) {
+            houseForRent.setHasPool(updatedHouseForRent.getHasPool());
+        }
+
+        // Оновлюємо список фотографій
+        if (updatedHouseForRent.getPhotos() != null) {
+            houseForRent.setPhotos(updatedHouseForRent.getPhotos());
+        }
 
         HouseForRent savedHouseForRent = houseForRentService.saveHouseForRent(houseForRent);
-
         return ResponseEntity.ok(savedHouseForRent);
     }
 

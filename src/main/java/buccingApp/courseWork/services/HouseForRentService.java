@@ -41,12 +41,12 @@ public class HouseForRentService {
     public Optional<HouseForRent> getById(Long id){
         return houseForRentRepository.findById(id);
     }
-    public User saveUser(HouseForRent houseForRent,Long id){
+    public HouseForRent saveUser(HouseForRent houseForRent,Long id){
         HouseForRent newHouseForRent= houseForRent;
         User user = userRepository.getById(id);
         user.addHouseForRent(newHouseForRent);
         houseForRentRepository.save(newHouseForRent);
-        return user;
+        return newHouseForRent;
     }
 
 
@@ -70,6 +70,20 @@ public class HouseForRentService {
         }
 
         return houseForRentRepository.findAll(spec);
+    }
+
+    public HouseForRent update(Long id, HouseForRent updatedHouse) {
+        Optional<HouseForRent> optionalHouse = getById(id);
+        HouseForRent house = optionalHouse.get();
+        house.setTitle(updatedHouse.getTitle());
+        house.setDescription(updatedHouse.getDescription());
+        house.setCity(updatedHouse.getCity());
+        house.setRooms(updatedHouse.getRooms());
+        house.setArea(updatedHouse.getArea());
+        house.setPrice(updatedHouse.getPrice());
+        // Оновлення списку фотографій
+        house.setPhotos(updatedHouse.getPhotos());
+        return houseForRentRepository.save(house);
     }
 
     public String delete(HouseForRent houseForRent){

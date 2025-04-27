@@ -13,7 +13,7 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String imageUrl; // Шлях до зображення (або URL)
 
     @ManyToOne(fetch = FetchType.LAZY)

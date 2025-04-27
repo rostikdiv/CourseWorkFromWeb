@@ -53,7 +53,7 @@ public class HouseForRent {
     @Column(nullable = false)
     private Boolean hasPool;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="owner_id", nullable = false)
     @JsonBackReference("user-house")
     private User owner;
@@ -107,6 +107,14 @@ public class HouseForRent {
     public void removeOffer(BookingOffer bookingOffer){
         bookingOffers.remove(bookingOffer);
         bookingOffer.setHouseOffer(null);
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos.clear();
+        if (photos != null) {
+            this.photos.addAll(photos);
+            photos.forEach(photo -> photo.setHouse(this));
+        }
     }
 
     public Long getId() {
@@ -202,9 +210,9 @@ public class HouseForRent {
         return photos;
     }
 
-    public void setPhotos(List<Photo> photos) {
-        this.photos = photos;
-    }
+//    public void setPhotos(List<Photo> photos) {
+//        this.photos = photos;
+//    }
 
     public List<Review> getReviewsTo() {
         return reviewsTo;

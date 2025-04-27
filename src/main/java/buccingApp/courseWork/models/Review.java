@@ -1,6 +1,7 @@
 package buccingApp.courseWork.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HouseForRent_id")
     @JsonBackReference("house-review")
+    @JsonProperty("houseForRentId")
     private HouseForRent houseForRent;
 
 //    @Column(nullable = false)
