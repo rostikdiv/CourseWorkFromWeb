@@ -230,6 +230,18 @@ public class HouseForRent {
         this.bookingOffers = bookingOffers;
     }
 
+    @Override
+    public String toString() {
+        return "HouseForRent{" +
+                "id=" + id +
+                ", price=" + price +
+                ", area=" + area +
+                ", rooms=" + rooms +
+                ", title='" + title + '\'' +
+                ", city='" + city + '\'' +
+                ", houseOwnerId=" + getHouseOwnerId() +
+                '}';
+    }
 //    public Long getHouseOwnerId() {
 //        return houseOwnerId;
 //    }

@@ -83,4 +83,14 @@ public class BookingOffer {
     public void setHouseOffer(HouseForRent houseOffer) {
         this.houseOffer = houseOffer;
     }
+    @Override
+    public String toString() {
+        return "BookingOffer{" +
+                "id=" + id +
+                ", lessorId=" + lessorId +
+                ", offerFrom=" + offerFrom +
+                ", offerTo=" + offerTo +
+                ", houseForRentId=" + getHouseForRentId() +
+                '}';
+    }
 }

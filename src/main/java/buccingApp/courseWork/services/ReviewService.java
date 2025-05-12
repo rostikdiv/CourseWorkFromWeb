@@ -20,11 +20,18 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final HouseForRentRepository houseForRentRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public ReviewService(ReviewRepository reviewRepository, HouseForRentRepository houseForRentRepository, UserRepository userRepository) {
+    public ReviewService(
+            ReviewRepository reviewRepository,
+            HouseForRentRepository houseForRentRepository,
+            UserRepository userRepository,
+            UserService userService
+    ) {
         this.reviewRepository = reviewRepository;
         this.houseForRentRepository = houseForRentRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Review> getAllReviews() {
@@ -33,6 +40,10 @@ public class ReviewService {
 
     public List<Review> getReviewsByHouseId(Long houseId) {
         return reviewRepository.findByHouseForRentId(houseId);
+    }
+
+    public List<Review> getReviewsByAuthorId(Long authorId) {
+        return reviewRepository.findByAuthorId(authorId);
     }
 
     public List<ReviewDTO> getReviewsByHouseIdWithLogin(Long houseId) {
@@ -76,12 +87,34 @@ public class ReviewService {
         return reviewRepository.findById(id);
     }
 
+    public Review updateReview(Long id, Review updatedReview, String authHeader) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+        Long userId = extractUserIdFromToken(authHeader);
+        if (!review.getAuthorId().equals(userId)) {
+            throw new RuntimeException("You can only edit your own reviews");
+        }
+        if (updatedReview.getComment() != null) {
+            review.setComment(updatedReview.getComment());
+        }
+        if (updatedReview.getRating() != 0) {
+            review.setRating(updatedReview.getRating());
+        }
+        return reviewRepository.save(review);
+    }
+
     public String delete(Review review) {
         reviewRepository.delete(review);
         return "Review: " + review.toString() + " has been deleted";
     }
 
-    public String deleteById(Long id) {
+    public String deleteById(Long id, String authHeader) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+        Long userId = extractUserIdFromToken(authHeader);
+        if (!review.getAuthorId().equals(userId)) {
+            throw new RuntimeException("You can only delete your own reviews");
+        }
         reviewRepository.deleteById(id);
         return "Review with id: " + id + " has been deleted";
     }
@@ -89,5 +122,22 @@ public class ReviewService {
     public String deleteAll() {
         reviewRepository.deleteAll();
         return "All reviews have been deleted";
+    }
+
+    private Long extractUserIdFromToken(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid or missing Authorization header");
+        }
+        String token = authHeader.substring(7);
+        boolean isValid = userService.verifyToken(token);
+        if (!isValid) {
+            throw new RuntimeException("Invalid token");
+        }
+        try {
+            String idStr = token.substring("generated-jwt-token-".length());
+            return Long.parseLong(idStr);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid token format");
+        }
     }
 }

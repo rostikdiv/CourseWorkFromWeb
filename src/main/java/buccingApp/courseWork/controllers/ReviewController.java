@@ -39,7 +39,7 @@ public class ReviewController {
         return ResponseEntity.ok(savedReview);
     }
 
-    @PostMapping("/toReview/{id}")
+    @PostMapping("/toHouse/{id}")
     public ResponseEntity<HouseForRent> updateHouseForRent(@RequestBody Review review, @PathVariable Long id) {
         HouseForRent house = reviewService.saveReview(review, id);
         return ResponseEntity.ok(house);
@@ -52,17 +52,20 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    @GetMapping("/byAuthor/{authorId}")
+    public ResponseEntity<List<Review>> getReviewsByAuthorId(@PathVariable Long authorId) {
+        List<Review> reviews = reviewService.getReviewsByAuthorId(authorId);
+        System.out.println("Reviews for authorId " + authorId + ": " + reviews); // Логування
+        return ResponseEntity.ok(reviews);
+    }
+
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody Review updatedReview) {
-        Review review = reviewService.getById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
-        if (updatedReview.getComment() != null) {
-            review.setComment(updatedReview.getComment());
-        }
-        if (updatedReview.getRating() != 0) {
-            review.setRating(updatedReview.getRating());
-        }
-        Review savedReview = reviewService.saveReview(review);
+    public ResponseEntity<Review> updateReview(
+            @PathVariable Long id,
+            @RequestBody Review updatedReview,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        Review savedReview = reviewService.updateReview(id, updatedReview, authHeader);
         return ResponseEntity.ok(savedReview);
     }
 
@@ -72,8 +75,8 @@ public class ReviewController {
     }
 
     @GetMapping("/delete/byId/{id}")
-    public String deleteById(@PathVariable Long id) {
-        return reviewService.deleteById(id);
+    public String deleteById(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
+        return reviewService.deleteById(id, authHeader);
     }
 
     @GetMapping("/delete/all")

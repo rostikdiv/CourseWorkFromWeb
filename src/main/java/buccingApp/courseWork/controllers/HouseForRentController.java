@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ForRent")
+@RequestMapping("/forRent")
 @CrossOrigin(origins = "http://localhost:5000", allowCredentials = "true")
 public class HouseForRentController {
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/photos")
+@RequestMapping("/photos")
 public class PhotoController {
     private final PhotoService photoService;
 
@@ -46,7 +46,7 @@ public class PhotoController {
         return ResponseEntity.ok(savedPhotos);
 
     }
-    @PostMapping("/toPhoto/{id}")
+    @PostMapping("/toHouse/{id}")
     public HouseForRent createHouseForRent(@RequestBody Photo photo, @PathVariable Long id){
 
         return photoService.savePhoto(photo, id);

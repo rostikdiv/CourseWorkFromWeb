@@ -1,6 +1,7 @@
 package buccingApp.courseWork.services;
 
 import buccingApp.courseWork.dto.LoginDTO;
+import buccingApp.courseWork.dto.UserDTO;
 import buccingApp.courseWork.models.User;
 import buccingApp.courseWork.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -81,6 +82,25 @@ public class UserService {
             System.out.println("Token invalid: incorrect ID format"); // Логування
             return false;
         }
+    }
+
+    public User updateUser(Long curentUserID, UserDTO UpdatedUserData) {
+        User curentUser = userRepository.findById(curentUserID).get();
+        if (!curentUser.getFirstName().equals(UpdatedUserData.getFirstName())) {
+            curentUser.setFirstName(UpdatedUserData.getFirstName());
+        }
+        if (!curentUser.getLastName().equals(UpdatedUserData.getLastName())) {
+            curentUser.setLastName(UpdatedUserData.getLastName());
+        }
+        if (!curentUser.getEmail().equals(UpdatedUserData.getEmail())) {
+            curentUser.setEmail(UpdatedUserData.getEmail());
+        }
+        if (!curentUser.getPhoneNumber().equals(UpdatedUserData.getPhoneNumber())) {
+            curentUser.setPhoneNumber(UpdatedUserData.getPhoneNumber());
+        }
+        userRepository.save(curentUser);
+        return curentUser;
+
     }
 
     public String delete(User user) {

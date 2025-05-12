@@ -41,7 +41,7 @@ public class BookingOfferController {
     public List<BookingOffer> createBookingOffers(@RequestBody List<BookingOffer> bookingOffers){
         return bookingOfferService.saveBookingOffer(bookingOffers);
     }
-    @PostMapping("/toOffer/{id}")
+    @PostMapping("/toHouse/{id}")
     public HouseForRent updateHouseForReent (@RequestBody BookingOffer bookingOffer, @PathVariable Long id){
         return bookingOfferService.saveBookingOffer(bookingOffer,id);
     }

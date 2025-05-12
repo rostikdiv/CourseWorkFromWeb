@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -82,12 +85,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
     }
+    @PutMapping("/edit/{id}")
+    public User editUser(@PathVariable Long id, @Valid @RequestBody UserDTO updatedUser) {
+        return userService.updateUser(id, updatedUser);
+    }
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user) {
         User savedUser = userService.saveUser(user);
         System.out.println("User created, ID: " + savedUser.getId()); // Логування
         return ResponseEntity.ok(new UserDTO(savedUser));
+    }
+    @PostMapping("/postAll")
+    public ResponseEntity<List<User>> createUsers(@Valid @RequestBody List<User> users) {
+        userService.saveUser(users);
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping("/logout")
@@ -101,8 +113,26 @@ public class UserController {
         System.out.println("Logout successful"); // Логування
         return ResponseEntity.ok().build();
     }
-
-    private String generateToken(User user) {
-        return "generated-jwt-token-" + user.getId();
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        return userService.getById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok) // Якщо користувач знайдений
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
     }
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+    private String generateToken(User user) {
+        System.out.println("");
+
+        return "generated-jwt-token-" + user.getId();
+
+    }
+
+    @GetMapping("/delete/byId/{id}")
+    public String deleteById(@PathVariable Long id) {
+        return userService.deleteById(id);
+    }
+
 }

@@ -44,4 +44,12 @@ public class Photo {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    @Override
+    public String toString() {
+        return "Photo{" +
+                "id=" + id +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", houseId=" + (house != null ? house.getId() : null) +
+                '}';
+    }
 }

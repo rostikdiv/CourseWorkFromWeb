@@ -120,7 +120,20 @@ public class User {
     public void setPhoneNumber(String  phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-//    public List<Long> getOwnReviewsId() {
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", login='" + login + '\'' +
+                '}';
+    }
+
+    //    public List<Long> getOwnReviewsId() {
 //        return ownReviewsId;
 //    }
 //

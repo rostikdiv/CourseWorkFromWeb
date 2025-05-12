@@ -17,9 +17,6 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "author_id")
-//    @JsonBackReference("user-review")
     @Column(nullable = false)
     private Long authorId;
 
@@ -29,7 +26,6 @@ public class Review {
     @JsonProperty("houseForRentId")
     private HouseForRent houseForRent;
 
-//    @Column(nullable = false)
     private String comment;
 
     @Column(nullable = false)
@@ -93,4 +89,15 @@ public class Review {
         this.authorId = authorId;
     }
 
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", authorId=" + authorId +
+                ", houseForRentId=" + (houseForRent != null ? houseForRent.getId() : null) +
+                ", comment='" + comment + '\'' +
+                ", rating=" + rating +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
